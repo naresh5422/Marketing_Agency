@@ -1,13 +1,13 @@
 #Schedule emails, reminders, and posts
 #Use schedule + smtplib or API integrations
 #Optional: connect with social media APIs
-
 import os
 import sys
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import schedule
 import time
 import smtplib
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from modules.reporting import generate_excel_report
@@ -56,10 +56,9 @@ def daily_client_report_job():
     from modules.client_management import get_clients
     clients = get_clients()
     for client in clients:
-        client_id, name, email, company, retainer_fee, join_date = client
-        report_path = generate_excel_report(client_id)
-        body = f"Hello {name},\n\nPlease find attached your latest campaign report.\n\nRegards,\nMarketing Agency"
-        send_email(email, "Daily Campaign Report", body, report_path)
+        report_path = generate_excel_report(client['id'])
+        body = f"Hello {client['name']},\n\nPlease find attached your latest campaign report.\n\nRegards,\nMarketing Agency"
+        send_email(client['email'], "Daily Campaign Report", body, report_path)
 
 # -------- Simulated Social Media Post Scheduler --------
 def post_social_media(campaign_name, content, platform):
